@@ -7,7 +7,7 @@ export default function Members() {
   return (
     <div className="flex gap-4">
       <Nav />
-      <div className="main flex flex-col justify-center w-full items-center">
+      <div className="main flex flex-col w-full items-center">
         <CommitteesList setCommittee={setCommittee} />
         <Table committee={committee} />
       </div>

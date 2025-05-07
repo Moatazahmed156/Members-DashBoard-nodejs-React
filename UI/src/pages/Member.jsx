@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import Nav from "../components/Nav";
+import { BaseURL } from "../data/base_url";
 
 function Member() {
   const { id } = useParams();
@@ -12,9 +13,7 @@ function Member() {
   useEffect(() => {
     async function fetchMemberData() {
       try {
-        const response = await axios.get(
-          `http://192.168.100.43:3000/members/${id}`
-        );
+        const response = await axios.get(`${BaseURL}/members/${id}`);
         setMemberData(response.data);
       } catch (err) {
         console.error("Error:", err);
@@ -27,9 +26,7 @@ function Member() {
   useEffect(() => {
     async function fetchSessionData() {
       try {
-        const response = await axios.get(
-          `http://192.168.100.43:3000/attendance/${id}`
-        );
+        const response = await axios.get(`${BaseURL}/attendance/${id}`);
         setSessions(response.data);
       } catch (err) {
         console.error("Error:", err);
@@ -49,7 +46,7 @@ function Member() {
     updateBTN.innerText = "loading...";
     updateBTN.setAttribute("disabled", "true");
     try {
-      await axios.patch(`http://192.168.100.43:3000/members/${id}`, memberData);
+      await axios.patch(`${BaseURL}/members/${id}`, memberData);
       alert("Data updated Successfully");
     } catch (err) {
       console.error("Error: ", err);
@@ -61,7 +58,7 @@ function Member() {
 
   async function Delete(sessionId) {
     try {
-      await axios.delete(`http://192.168.100.43:3000/attendance/${sessionId}`);
+      await axios.delete(`${BaseURL}/attendance/${sessionId}`);
       setSessions((prev) => prev.filter((e) => e.id !== sessionId));
     } catch (err) {
       console.error("Error deleting session:", err);

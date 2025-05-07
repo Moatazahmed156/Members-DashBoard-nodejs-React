@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MdDelete, MdPersonAdd } from "react-icons/md";
+import { BaseURL } from "../data/base_url";
 
 export default function AttendanceTable({ committee }) {
   const [tableData, setTableData] = useState([]);
@@ -11,7 +12,7 @@ export default function AttendanceTable({ committee }) {
     async function fetchData() {
       try {
         let response = await axios.get(
-          `http://192.168.100.43:3000/attendance?${
+          `${BaseURL}/attendance?${
             committee != "All" ? `committee=${committee}` : ""
           }${filterSession != "Sessions" ? `&session=${filterSession}` : ""}`
         );
@@ -25,7 +26,7 @@ export default function AttendanceTable({ committee }) {
   }, [committee, filterSession]);
   async function Delete(id) {
     try {
-      await axios.delete(`http://192.168.100.43:3000/attendance/${id}`);
+      await axios.delete(`${BaseURL}/attendance/${id}`);
       setTableData(tableData.filter((student) => student.id !== id));
       alert(`Attendance deleted Successfully`);
     } catch (err) {

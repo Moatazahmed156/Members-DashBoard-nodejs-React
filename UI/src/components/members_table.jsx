@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdDelete, MdPersonAdd } from "react-icons/md";
 import SessionsPopup from "./sessions_popup";
+import { BaseURL } from "../data/base_url";
 
 function Table({ committee }) {
   const [tableData, setTableData] = useState([]);
@@ -12,7 +13,7 @@ function Table({ committee }) {
     async function fetchData() {
       try {
         let response = await axios.get(
-          `http://192.168.100.43:3000/members${
+          `${BaseURL}/members${
             committee != "All" ? `?committee=${committee}` : ""
           }`
         );
@@ -26,7 +27,7 @@ function Table({ committee }) {
   }, [committee]);
   async function Delete(id) {
     try {
-      await axios.delete(`http://192.168.100.43:3000/members/${id}`);
+      await axios.delete(`${BaseURL}/members/${id}`);
       setTableData(tableData.filter((student) => student.id !== id));
       alert(`Student with ID: ${id} deleted Successfully`);
     } catch (err) {

@@ -1,6 +1,7 @@
 import Nav from "../components/Nav";
 import axios from "axios";
 import { useState } from "react";
+import { BaseURL } from "../data/base_url";
 export default function AddMember() {
   const [memberData, setMemberData] = useState({
     name: "",
@@ -13,7 +14,7 @@ export default function AddMember() {
 
   async function AddMember() {
     try {
-      await axios.post(`http://192.168.100.43:3000/members`, memberData);
+      await axios.post(`${BaseURL}/members`, memberData);
       alert("Member add successfully");
     } catch (err) {
       console.error("Error: ", err);
