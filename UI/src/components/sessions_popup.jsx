@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { BaseURL } from "../data/base_url";
+import { BaseURL, header } from "../data/base_url";
 export default function SessionsPopup({ onClose, memberID }) {
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState("");
@@ -9,12 +9,15 @@ export default function SessionsPopup({ onClose, memberID }) {
   ];
   async function handleAttend(session) {
     try {
-      let response = await axios.post(`${BaseURL}/attendance`, {
-        memberId: memberID,
-        session: `Session ${session}`,
-      });
+      let response = await axios.post(
+        `${BaseURL}/attendance`,
+        {
+          memberId: memberID,
+          session: `Session ${session}`,
+        },
+        header
+      );
       setMessage(response.data.message);
-      console.log(response);
       setSuccess(true);
     } catch (err) {
       console.error("Error: ", err);

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import Nav from "../components/Nav";
-import { BaseURL } from "../data/base_url";
+import { BaseURL, header } from "../data/base_url";
 
 function Member() {
   const { id } = useParams();
@@ -46,10 +46,10 @@ function Member() {
     updateBTN.innerText = "loading...";
     updateBTN.setAttribute("disabled", "true");
     try {
-      await axios.patch(`${BaseURL}/members/${id}`, memberData);
+      await axios.patch(`${BaseURL}/members/${id}`, memberData, header);
       alert("Data updated Successfully");
     } catch (err) {
-      console.error("Error: ", err);
+      console.error("Error: ", err?.message);
     } finally {
       updateBTN.innerText = "Update";
       updateBTN.removeAttribute("disabled");
@@ -58,7 +58,7 @@ function Member() {
 
   async function Delete(sessionId) {
     try {
-      await axios.delete(`${BaseURL}/attendance/${sessionId}`);
+      await axios.delete(`${BaseURL}/attendance/${sessionId}`, header);
       setSessions((prev) => prev.filter((e) => e.id !== sessionId));
     } catch (err) {
       console.error("Error deleting session:", err);

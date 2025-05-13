@@ -1,11 +1,26 @@
 const express = require("express");
 const db = require("./db");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const { verifyAdmin } = require("./virfyAuth");
 const Attendance = require("./attendance");
 const Members = require("./members");
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" }));
+
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url} - ${new Date().toISOString()}`);
+  next();
+});
+
+app.post("/login", (req, res) => {
+  const { username, password, role } = req.body;
+  const token = jwt.sign({ username, role }, "your-secret-key", {
+    expiresIn: "5h",
+  });
+  res.json({ message: "login successfully", token });
+});
 
 app.get("/members", async (req, res) => {
   const { committee } = req.query;
@@ -34,7 +49,7 @@ app.get("/members/:id", async (req, res) => {
   }
 });
 
-app.post("/members", async (req, res) => {
+app.post("/members", verifyAdmin, async (req, res) => {
   const { name, committee } = req.body;
   try {
     const newMember = await Members.create({ name, committee });
@@ -44,7 +59,7 @@ app.post("/members", async (req, res) => {
   }
 });
 
-app.patch("/members/:id", async (req, res) => {
+app.patch("/members/:id", verifyAdmin, async (req, res) => {
   const { id } = req.params;
   const { name, committee } = req.body;
   try {
@@ -60,7 +75,7 @@ app.patch("/members/:id", async (req, res) => {
   }
 });
 
-app.delete("/members/:id", async (req, res) => {
+app.delete("/members/:id", verifyAdmin, async (req, res) => {
   const { id } = req.params;
   try {
     const deleted = await Members.destroy({ where: { id } });
@@ -102,7 +117,7 @@ app.get("/attendance/:id", async (req, res) => {
   }
 });
 
-app.post("/attendance", async (req, res) => {
+app.post("/attendance", verifyAdmin, async (req, res) => {
   const { memberId, session } = req.body;
 
   if (!session) {
@@ -126,7 +141,7 @@ app.post("/attendance", async (req, res) => {
   }
 });
 
-app.delete("/attendance/:id", async (req, res) => {
+app.delete("/attendance/:id", verifyAdmin, async (req, res) => {
   const { id } = req.params;
   try {
     const deleted = await Attendance.destroy({ where: { id } });
@@ -137,7 +152,11 @@ app.delete("/attendance/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
+app.use((err, req, res, next) => {
+  if (err) {
+    res.status(401).json({ message: "user not Authorized", url: `${req.url}` });
+  }
+});
 app.listen(3000, async () => {
   await db.sync({ force: false, alter: true });
   console.log("The table for the User model was just created!");

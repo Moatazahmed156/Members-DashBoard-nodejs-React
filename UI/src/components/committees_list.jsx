@@ -7,7 +7,7 @@ export default function CommitteesList({ setCommittee }) {
   return (
     <div className="mt-6 flex gap-6">
       <CommitteeCard
-        icon="🔍"
+        icon="🌍"
         title="ALL"
         IsActive={active == 1}
         handleCommittee={() => {

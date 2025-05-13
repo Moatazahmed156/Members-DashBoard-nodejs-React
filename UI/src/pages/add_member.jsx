@@ -1,7 +1,7 @@
 import Nav from "../components/Nav";
 import axios from "axios";
 import { useState } from "react";
-import { BaseURL } from "../data/base_url";
+import { BaseURL, header } from "../data/base_url";
 export default function AddMember() {
   const [memberData, setMemberData] = useState({
     name: "",
@@ -12,9 +12,10 @@ export default function AddMember() {
     setMemberData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  async function AddMember() {
+  async function AddMember(e) {
+    e.preventDefault();
     try {
-      await axios.post(`${BaseURL}/members`, memberData);
+      await axios.post(`${BaseURL}/members`, memberData, header);
       alert("Member add successfully");
     } catch (err) {
       console.error("Error: ", err);

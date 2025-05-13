@@ -1,1 +1,5 @@
-export const BaseURL = "http://192.168.100.43:3000";
+export const BaseURL = "http://localhost:3000";
+const token = localStorage.getItem("token");
+export const header = {
+  headers: { Authorization: `Bearer ${token}` },
+};

@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../public/180daraga-B9qyHRiz.png";
-function Nav() {
+export default function Nav() {
   return (
     <div className="min-h-screen bg-[#222222] py-4 flex flex-col gap-4 items-center min-w-[17%]">
       <img src={logo} alt="180 Daraga Logo" className="size-24" />
@@ -24,4 +24,3 @@ function Nav() {
     </div>
   );
 }
-export default Nav;

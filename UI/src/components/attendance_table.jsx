@@ -1,13 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { MdDelete, MdPersonAdd } from "react-icons/md";
-import { BaseURL } from "../data/base_url";
+import { BaseURL, header } from "../data/base_url";
 
 export default function AttendanceTable({ committee }) {
   const [tableData, setTableData] = useState([]);
   const [DataFetched, setDataFetched] = useState(false);
   const [filterSession, setFilterSession] = useState("Sessions");
-  console.log(filterSession);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -26,7 +25,7 @@ export default function AttendanceTable({ committee }) {
   }, [committee, filterSession]);
   async function Delete(id) {
     try {
-      await axios.delete(`${BaseURL}/attendance/${id}`);
+      await axios.delete(`${BaseURL}/attendance/${id}`, header);
       setTableData(tableData.filter((student) => student.id !== id));
       alert(`Attendance deleted Successfully`);
     } catch (err) {
