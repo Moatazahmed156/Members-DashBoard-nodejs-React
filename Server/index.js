@@ -7,7 +7,8 @@ const Attendance = require("./attendance");
 const Members = require("./members");
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors());
+
 
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url} - ${new Date().toISOString()}`);
